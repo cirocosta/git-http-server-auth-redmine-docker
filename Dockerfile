@@ -11,12 +11,12 @@ MAINTAINER Hiroshi Miura <miurahr@nttdata.co.jp>
 WORKDIR /tmp
 RUN apt-get -qq -y update && apt-get -qq -y upgrade
 RUN apt-get -qq -y --force-yes install git-sh git sharutils
+RUN apt-get -qq -y apache2
 
-## Setup service
-# Setup a git user and SSH
-RUN groupadd -g 987 git && useradd -g git -u 987 -d /git -m -r -s /usr/bin/git-shell git
-#Set a long random password to unlock the git user account
-RUN usermod -p `dd if=/dev/urandom bs=1 count=30 | uuencode -m - | head -2 | tail -1` git
+## Install grack
+WORKDIR /srv
+RUN mkdir /git/repo
+chown -R apache:apache /git/repo
 
 ## Remove /etc/motd
 RUN rm -rf /etc/update-motd.d /etc/motd /etc/motd.dynamic 
